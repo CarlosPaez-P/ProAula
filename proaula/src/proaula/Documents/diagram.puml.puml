@@ -1,0 +1,100 @@
+@startuml
+
+' Configuración de estilos
+skinparam classAttributeIconSize 0
+skinparam classFontSize 14
+skinparam classFontStyle bold
+
+' Definición de la clase Usuario
+class Usuario {
+    - nombre: String
+    - apellido: String
+    - fechaNacimiento: Date
+    - correo: String
+    - usuario: String
+    - contrasena: String
+    - codigoAdmin: int
+    - tareas: List<Tarea>
+    ---
+    + Usuario(nombre: String, apellido: String, fechaNacimiento: Date, correo: String, usuario: String, contrasena: String, codigoAdmin: int)
+    + getTareas(): List<Tarea>
+    + marcarTareaRealizada(tarea: Tarea, realizada: boolean): void
+    + solicitarFraseMotivacional(): String
+    + validarContrasena(contrasena: String): boolean
+}
+
+' Definición de la clase Administrador
+class Administrador {
+    - nombre: String
+    - apellido: String
+    - fechaNacimiento: Date
+    - correo: String
+    - usuario: String
+    - contrasena: String
+    - codigoAdmin: int
+    - usuarios: List<Usuario>
+    ---
+    + Administrador(nombre: String, apellido: String, fechaNacimiento: Date, correo: String, usuario: String, contrasena: String, codigoAdmin: int)
+    + crearCodigoAdmin(): int
+    + agregarTarea(usuario: Usuario, tarea: Tarea): void
+    + eliminarTarea(usuario: Usuario, tarea: Tarea): void
+    + editarTarea(tarea: Tarea, nuevoNombre: String, nuevaDescripcion: String): void
+    + agregarUsuario(usuario: Usuario): void
+    + eliminarUsuario(usuario: Usuario): void
+    + buscarTareasPorUsuario(usuario: Usuario): List<Tarea>
+    + agregarFrase(tipo: String, frase: String): void
+    + eliminarFrase(tipo: String, frase: String): void
+    + validarInformacionUsuario(usuario: Usuario): boolean
+}
+
+' Definición de la clase Tarea
+class Tarea {
+    - nombre: String
+    - descripcion: String
+    - realizada: boolean
+    ---
+    + Tarea(nombre: String, descripcion: String)
+    + getNombre(): String
+    + setNombre(nombre: String): void
+    + getDescripcion(): String
+    + setDescripcion(descripcion: String): void
+    + isRealizada(): boolean
+    + setRealizada(realizada: boolean): void
+}
+
+' Definición de la clase SistemaDeGestion
+class SistemaDeGestion {
+    - usuarios: List<Usuario>
+    - administradores: List<Administrador>
+    - frasesElogio: List<String>
+    - frasesAliento: List<String>
+    - frasesMotivacionales: List<String>
+    ---
+    + SistemaDeGestion()
+    + iniciarSesion(usuario: String, contrasena: String): Object
+    + registrarUsuario(nombre: String, apellido: String, fechaNacimiento: Date, correo: String, usuario: String, contrasena: String, codigoAdmin: int): Usuario
+    + registrarAdministrador(nombre: String, apellido: String, fechaNacimiento: Date, correo: String, usuario: String, contrasena: String, codigoAdmin: int): Administrador
+    + validarCodigoAdmin(codigoAdmin: int): boolean
+    + validarUsuarioUnico(usuario: String): boolean
+    + obtenerFrasePorEstado(realizada: boolean): String
+    + obtenerFraseMotivacionalAleatoria(): String
+    + agregarUsuario(usuario: Usuario): void
+    + agregarAdministrador(administrador: Administrador): void
+    + agregarFraseElogio(frase: String): void
+    + agregarFraseAliento(frase: String): void
+    + agregarFraseMotivacional(frase: String): void
+    + validarInformacionUsuarios(): void
+}
+
+' Relaciones entre clases
+Usuario <|-- Administrador : hereda
+Administrador "1" --> "*" Usuario : gestiona
+SistemaDeGestion o-- Usuario : contiene
+SistemaDeGestion o-- Administrador : contiene
+SistemaDeGestion o-- Tarea : contiene
+Administrador "1" --> "*" Tarea : asigna
+SistemaDeGestion o-- frasesElogio : contiene
+SistemaDeGestion o-- frasesAliento : contiene
+SistemaDeGestion o-- frasesMotivacionales : contiene
+
+@enduml
